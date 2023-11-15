@@ -18,6 +18,10 @@ With the semantic distances, we will implement the A* search algorithm to create
 Furthermore, given the multitude of navigation paths that are provided along with the Wikispeedia network, we will be able to implement some network machine learning techniques (ie. Graph Neural Networks) to predict human behaviour.
 Ultimately, we will compare Men and Machines path structures, with metrics like length, cost or semantic distance, to draw our conclusions.
 
+## Virtual Environment
+We created a virtual environment (included in this GitHub) called as our team name, amonavis.
+To activate it, run source ./amonavis/bin/activate 
+
 ## Proposed timeline and organisation within the team
 * By the end of week 1, we will finish the data cleaning, look for the most appropriate machine learning techniques to work with (according to the efficiency of the models and the technical feasibility based on our expertise) and divide us in two groups: one for the main analyses and one for the machine learning part;
 * by the end of week 2, we will answer the first 2 research questions, meaning we will have mastered our way through the dataset;
