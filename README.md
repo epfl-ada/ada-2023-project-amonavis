@@ -20,12 +20,12 @@ two entities approach this same problem?
 
 <!---
 Danielle's original intro
--->
+
 Did you ever get lost in your Wikipedia session, when a chain reaction in your thoughts lead you from the discography of your favourite artist to the colonial history of Tokelau?
 Over the centuries, our personal experiences and the evolution of linguistics made us able to create connections, and we are now reflecting this tendency in knowledge graphs like Wikipedia.
 However, among the countless paths connecting two topics, our fallible mind often relies on our biased knowledge to create those connections: this leads us to trace paths that can appear obvious to us, but unnecessarily long or even nonsensical to a machine, which is traditionally seeking the fastest and optimal approach.
 The Man and the Machine starts from human navigation paths, defined by the users playing the Wikispeedia game, to then dwell into the navigation ability of the machine, through semantic-distance-based paths: how differently will the two entities approach this same problem?
-
+-->
 ## Research questions
 * How does semantic distance affect the shortest paths found by A*, when compared to other heuristics for the shortest paths?
 * If time allows, are there any superior AI methods for exploring the graph?
