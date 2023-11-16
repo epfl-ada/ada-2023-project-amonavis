@@ -44,3 +44,35 @@ def plaintext_article_finder(article_name: str) -> str:
     text_file.close()
 
     return res_string
+
+def source_target_paths_information() -> pd.DataFrame:
+    """This was entirely written by Sophea, I just took some time to clean it up and make it it's own
+    separate method."""
+    finished_paths = read_finished_paths()
+
+    article_combinations_count = finished_paths.groupby(['first_article', 'last_article']).size().reset_index(name='count')
+
+    # The mean and std of the path length for each pair of articles
+    article_combinations_stats = finished_paths.groupby(['first_article', 'last_article'])['path_length'].agg(['mean', 'std']).reset_index()
+    article_combinations_stats['std'] = article_combinations_stats['std'].fillna(0)
+    article_combinations_stats.rename(columns={'mean': 'mean_length', 'std': 'std_length'}, inplace=True)
+
+    # The mean and std of the rating for each pair of articles.
+    # Note that mean and std may be nan if there are nan ratings. We purposely leave them as nan, as we don't want to fill them with 0s or 1s.
+    # Depending on the application, we could change this in the future if neeeded.
+    rating_combinations_stats_rating = finished_paths.groupby(['first_article', 'last_article'])['rating'].agg(['mean', 'std']).reset_index()
+    mask = rating_combinations_stats_rating['mean'].notnull()
+    rating_combinations_stats_rating.loc[mask, 'std'] = rating_combinations_stats_rating.loc[mask, 'std'].fillna(0)
+    rating_combinations_stats_rating.rename(columns={'mean': 'mean_rating', 'std': 'std_rating'}, inplace=True)
+
+    # The mean and std of the time for each pair of articles.
+    rating_combinations_stats_time = finished_paths.groupby(['first_article', 'last_article'])['durationInSec'].agg(['mean', 'std']).reset_index()
+    rating_combinations_stats_time['std'] = rating_combinations_stats_time['std'].fillna(0)
+    rating_combinations_stats_time.rename(columns={'mean': 'mean_durationInSec', 'std': 'std_durationInSec'}, inplace=True)
+
+    # Merging all the dataframes
+    article_combinations = pd.merge(article_combinations_count, article_combinations_stats, on=['first_article', 'last_article'])
+    article_combinations = pd.merge(article_combinations, rating_combinations_stats_rating, on=['first_article', 'last_article'])
+    article_combinations = pd.merge(article_combinations, rating_combinations_stats_time, on=['first_article', 'last_article'])
+
+    return article_combinations
