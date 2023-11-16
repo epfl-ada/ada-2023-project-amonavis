@@ -50,6 +50,7 @@ For a smooth collaboration and code execution, we created a virtual environment 
 To activate it, run source ``` ./amonavis/bin/activate ```
 
 ## Proposed timeline and organisation within the team
+Defined in 5 weeks, from P2 to P3:
 * By the end of week 1, we will finish the data cleaning divide us in two groups: one for the main descriptive statistics and testing part (Carlos, Carolina, Daniele) and one for the graph algorithms design and implementation (Nicolas, Sophea);
 * by the end of week 2, we will answer the first 2 research questions, meaning we will have mastered our way through the dataset provided;
 * by the end of week 3, we will answer the last 2 research questions, meaning we will have mastered the graphs algorithms and the new data generated and we will be done with our comparisons;
