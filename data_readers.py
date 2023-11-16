@@ -10,6 +10,10 @@ def read_wikispeedia_graph() -> networkx.Graph:
 def read_finished_paths() -> pd.DataFrame:
     paths_finished = pd.read_csv('datasets/wikispeedia_paths-and-graph/paths_finished.tsv', sep='\t', skiprows=15,
                                  names=['hashedIpAddress', 'timestamp', "durationInSec", 'path', "rating"])
+    paths_finished['first_article'] = paths_finished['path'].apply(lambda x: x.split(';')[0])
+    paths_finished['last_article'] = paths_finished['path'].apply(lambda x: x.split(';')[-1])
+    paths_finished['path_length'] = paths_finished['path'].apply(lambda x: len(x.split(';')))
+    paths_finished['date'] = pd.to_datetime(paths_finished['timestamp'], unit='s')
     return paths_finished
 
 def read_unfinished_paths() -> pd.DataFrame:
@@ -17,6 +21,10 @@ def read_unfinished_paths() -> pd.DataFrame:
                                    names=['hashedIpAddress', 'timestamp', "durationInSec", 'path', "target", "type"])
 
     return paths_unfinished
+
+def read_articles() -> pd.DataFrame:
+    articles = pd.read_csv('datasets/wikispeedia_paths-and-graph/articles.tsv', sep='\t', skiprows=12, header=None, names=['articles'])
+    return articles
 
 def read_shortest_path_df() -> pd.DataFrame:
     """Reads in the shortest path matrix. In this method, if there is no path between two
