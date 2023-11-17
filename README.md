@@ -62,7 +62,7 @@ Our timeline is defined in 5 weeks, from P2 to P3:
 * by the end of week 4, we will choose the final plots and elements of the notebook to include in the blog page, for a comprehensive and exhaustive storytelling;
 * by the end of week 5, we will do our final reviews of the blog and polish the design for an effective publication and presentation.
 
-## Questions for TAs (optional): 
+## Questions for TAs: 
 * We incurred in extremely slow computations when evaluating the similarities: any tips to optimize the process?
 
 ## References
