@@ -35,25 +35,30 @@ The Man and the Machine starts from human navigation paths, defined by the users
 * How do these compare to the optimal path?
  
 ## Methods
-First of all, we will use NetworkX to create the Wikispeedia graph to work on. After some exploratory analysis, we will clean the dataset from outliers we do not need. _To identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions._ 
+First of all, we will use NetworkX to create the Wikispeedia graph to work on. For the initial exploratory analysis, along with the degrees of the nodes, we are using PageRank to measure the centrality of the nodes. After some exploratory analysis, we will clean the dataset from outliers we do not need. _To identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions._ 
 Other tests will be done, but we first want to get a proper understanding of how humans explore the path.
 
 To compute the semantic distances between each page, we will embed each title into a vector, through the Bert transformers, and we will use the cosine similarity as our main similarity metric. 
 After computing our similarity matrix (whose values will only be between -1 and +1, by definition), we will define the semantic distance as $dist(x, y) = 1 - cos \textunderscore similarity (x, y) + 1$: the first two terms are essential to represent the semantic distance as the opposite of the semantic similarity (the more similar two titles are, the closer they should be in the graph), the second $+1$ is a design choice to work only with values greater than 1 and effectively implement the A* search algorithm.
 
-As mentioned above, we will implement the A* search algorithm with the semantic distances being the weights of the edges constructed between the linked articles. We will then find the shortest paths taking into account the semantic distance between the nodes, and compare them to the shortest paths in the dataset (being the research of the shortest path based on heuristics, we can expect significant differences based on the different design choices).
+As mentioned above, we will implement the A* search algorithm which uses an approximation for the node distance, $f(n) = g(n) + h(n)$ assuming it's worse than the actual distance, to explore the graph, where $g(n)$ is the cost from the start node to n, and $h(n)$ is the estimated cost from n to the goal, balancing exact path costs with heuristic estimates for efficient shortest path finding
+We will then find the shortest paths using the semantic distance between the nodes as the weights of the edges constructed between the linked articles, and compare them to the shortest paths provided in the dataset (given that the research of the shortest path is based on heuristics, we can expect significant differences based on the different design choices).
 
 Furthermore, given the multitude of navigation paths that are provided along with the Wikispeedia network, we will be able to compare the human navigation paths with the "semantic-paths": to do so, we will group the paths with the same starting node and target node by "human path is shorter", "semantic path is shorter", "both approaches have the same length". This will be useful to draw our conclusions and ultimately look for patterns within the different performances measured, with targets belonging to the same Wikipedia category sharing the same performance.
+
+More detail on our plan and mathematical details can be found on the GitHub issues page.
 
 ## Virtual environment
 For a smooth collaboration and code execution, we created a virtual environment (included in this GitHub) called as our team name, amonavis.
 To activate it, run source ``` ./amonavis/bin/activate ```
 
 ## Proposed timeline and organisation within the team
-Defined in 5 weeks, from P2 to P3:
+For an effective collaboration, we are using GitHub issues to share our to-dos, label each entry by priority and scope and assign the tasks between un. This will help us sharing our progress and mutually support each other's tasks. 
+
+Our timeline is defined in 5 weeks, from P2 to P3:
 * By the end of week 1, we will finish the data cleaning divide us in two groups: one for the main descriptive statistics and testing part (Carlos, Carolina, Daniele) and one for the graph algorithms design and implementation (Nicolas, Sophea);
-* by the end of week 2, we will answer the first 2 research questions, meaning we will have mastered our way through the dataset provided;
-* by the end of week 3, we will answer the last 2 research questions, meaning we will have mastered the graphs algorithms and the new data generated and we will be done with our comparisons;
+* by the end of week 2, we will answer the first 3 research questions, meaning we will have mastered our way through the dataset provided;
+* by the end of week 3, we will answer the last 3 research questions, meaning we will have mastered the graphs algorithms and the new data generated and we will be done with our comparisons;
 * by the end of week 4, we will choose the final plots and elements of the notebook to include in the blog page, for a comprehensive and exhaustive storytelling;
 * by the end of week 5, we will do our final reviews of the blog and polish the design for an effective publication and presentation.
 
