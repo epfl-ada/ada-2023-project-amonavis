@@ -26,6 +26,11 @@ def read_articles() -> pd.DataFrame:
     articles = pd.read_csv('datasets/wikispeedia_paths-and-graph/articles.tsv', sep='\t', skiprows=12, header=None, names=['articles'])
     return articles
 
+def read_categories() -> pd.DataFrame:
+    categories = pd.read_csv('datasets/wikispeedia_paths-and-graph/categories.tsv', sep='\t', skiprows=12, names = ['article', 'categories'])
+    return categories
+
+
 def read_shortest_path_df() -> pd.DataFrame:
     """Reads in the shortest path matrix. In this method, if there is no path between two
     nodes then the matrix returns a -1"""
