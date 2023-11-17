@@ -39,8 +39,8 @@ First of all, we will use NetworkX to create the Wikispeedia graph to work on. F
 Other tests will be done, but we first want to get a proper understanding of how humans explore the path.
 
 <div>
- <img src="Figures/AveragePageRank60.png" alt="hello" width="500" height="600"/>
- <img src="Figures/HigherDegree60.png" alt="hello" width="500" height="600"/>
+ <img src="Figures/AveragePageRank60.png" alt="hello" width="600" height="800"/>
+ <img src="Figures/HigherDegree60.png" alt="hello" width="600" height="800"/>
 </div>
 
 To compute the semantic distances between each page, we will embed each title into a vector, through the Bert transformers, and we will use the cosine similarity as our main similarity metric. 
