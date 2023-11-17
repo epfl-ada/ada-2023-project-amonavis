@@ -35,7 +35,7 @@ The Man and the Machine starts from human navigation paths, defined by the users
 * How do these compare to the optimal path?
  
 ## Methods
-First of all, we will use NetworkX to create the Wikispeedia graph to work on. For the initial exploratory analysis, along with the degrees of the nodes, we are using PageRank to measure the centrality of the nodes (Fig. 1). After this initial exploration, we will clean the dataset from outliers we do not need. Finally, to identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions.
+First of all, we will use NetworkX to create the Wikispeedia graph to work on. For the initial exploratory analysis, along with the degrees of the nodes, we are using PageRank to measure the centrality of the nodes (Fig. 1; Fig. 2). After this initial exploration, we will clean the dataset from outliers we do not need. Finally, to identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions.
 Other tests will be done, but we first want to get a proper understanding of how humans explore the path.
 
 To compute the semantic distances between each page, we will embed each title into a vector, through the Bert transformers, and we will use the cosine similarity as our main similarity metric. 
@@ -67,8 +67,8 @@ Our timeline is defined in 5 weeks, from P2 to P3:
 
 ## Figures
 <p align="center" > 
-<img align="center" src="Figures/AveragePageRank60.png" alt="hello" width="800" height="900"/>
-<img align="center" src="Figures/HigherDegree60.png" alt="hello" width="800" height="900"/> </br> Fig. 1: PageRank representation of lower and higher degrees nodes</p>
+<img align="center" src="Figures/AveragePageRank60.png" alt="hello" width="800" height="900"/> </br> Fig. 1: Nodes with above-average PageRank values (relative importance based on the links)</br>
+<img align="center" src="Figures/HigherDegree60.png" alt="hello" width="800" height="900"/> </br> Fig. 2: Nodes with higher degrees (importance in terms of connections within the graph)</p>
 
 ## References
 1)  "AlphaGo Movie". AlphaGo Movie. Archived from the original on 3 January 2018. Retrieved 14 October 2017.
