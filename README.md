@@ -35,7 +35,7 @@ The Man and the Machine starts from human navigation paths, defined by the users
 * How do these compare to the optimal path?
  
 ## Methods
-First of all, we will use NetworkX to create the Wikispeedia graph to work on. After some exploratory analysis, we will clean the dataset from outliers we do not need. _To identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions._ 
+First of all, we will use NetworkX to create the Wikispeedia graph to work on. For the initial exploratory analysis, along with the degrees of the nodes, we are using PageRank to measure the centrality of the nodes. After some exploratory analysis, we will clean the dataset from outliers we do not need. _To identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions._ 
 Other tests will be done, but we first want to get a proper understanding of how humans explore the path.
 
 To compute the semantic distances between each page, we will embed each title into a vector, through the Bert transformers, and we will use the cosine similarity as our main similarity metric. 
@@ -50,10 +50,12 @@ For a smooth collaboration and code execution, we created a virtual environment 
 To activate it, run source ``` ./amonavis/bin/activate ```
 
 ## Proposed timeline and organisation within the team
-Defined in 5 weeks, from P2 to P3:
+For an effective collaboration, we are using GitHub issues to share our to-dos, label each entry by priority and scope and assign the tasks between un. This will help us sharing our progress and mutually support each other's tasks.
+
+Our timeline is defined in 5 weeks, from P2 to P3:
 * By the end of week 1, we will finish the data cleaning divide us in two groups: one for the main descriptive statistics and testing part (Carlos, Carolina, Daniele) and one for the graph algorithms design and implementation (Nicolas, Sophea);
-* by the end of week 2, we will answer the first 2 research questions, meaning we will have mastered our way through the dataset provided;
-* by the end of week 3, we will answer the last 2 research questions, meaning we will have mastered the graphs algorithms and the new data generated and we will be done with our comparisons;
+* by the end of week 2, we will answer the first 3 research questions, meaning we will have mastered our way through the dataset provided;
+* by the end of week 3, we will answer the last 3 research questions, meaning we will have mastered the graphs algorithms and the new data generated and we will be done with our comparisons;
 * by the end of week 4, we will choose the final plots and elements of the notebook to include in the blog page, for a comprehensive and exhaustive storytelling;
 * by the end of week 5, we will do our final reviews of the blog and polish the design for an effective publication and presentation.
 
