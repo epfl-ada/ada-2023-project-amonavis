@@ -38,6 +38,8 @@ The Man and the Machine starts from human navigation paths, defined by the users
 First of all, we will use NetworkX to create the Wikispeedia graph to work on. For the initial exploratory analysis, along with the degrees of the nodes, we are using PageRank to measure the centrality of the nodes. After this initial exploration, we will clean the dataset from outliers we do not need. Finally, to identify trends and differences in the patterns, we will group the human paths by the category of the target node, see their how correlated the categories are with the length of the shortest paths (ANOVA test) and test the differences between the distributions.
 Other tests will be done, but we first want to get a proper understanding of how humans explore the path.
 
+![Figure Description](Figures/AveragePageRank60.png)
+
 To compute the semantic distances between each page, we will embed each title into a vector, through the Bert transformers, and we will use the cosine similarity as our main similarity metric. 
 After computing our similarity matrix (whose values will only be between -1 and +1, by definition), we will define the semantic distance as $dist(x, y) = 1 - cos \textunderscore similarity (x, y) + 1$: the first two terms are essential to represent the semantic distance as the opposite of the semantic similarity (the more similar two titles are, the closer they should be in the graph), the second $+1$ is a design choice to work only with values greater than 1 and effectively implement the A* search algorithm.
 
