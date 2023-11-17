@@ -67,8 +67,9 @@ Our timeline is defined in 5 weeks, from P2 to P3:
 
 ## Figures
 <p align="center" > 
-<img align="center" src="Figures/AveragePageRank60.png" alt="hello" width="800" height="900"/> </br> Fig. 1: Nodes with above-average PageRank values (relative importance based on the links)</br>
-<img align="center" src="Figures/HigherDegree60.png" alt="hello" width="800" height="900"/> </br> Fig. 2: Nodes with higher degrees (importance in terms of connections within the graph)</p>
+<img align="center" src="Figures/AveragePageRank60.png" alt="hello" width="800" height="900"/> </br> Fig. 1: Nodes with above-average PageRank values (importance of the incoming links defines article ranking)</br>
+</br>
+<img align="center" src="Figures/HigherDegree60.png" alt="hello" width="800" height="900"/> </br> Fig. 2: Nodes with higher degrees (importance in terms of number of connections within the graph)</p>
 
 ## References
 1)  "AlphaGo Movie". AlphaGo Movie. Archived from the original on 3 January 2018. Retrieved 14 October 2017.
