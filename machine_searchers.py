@@ -232,4 +232,5 @@ def only_depth_first_astar_path(G: nx.Graph, source: str, target: str, heuristic
                 curnode = node
                 break
 
-    raise nx.NetworkXNoPath(f"Node {target} not reachable from {source}")
+    print(f"Node {target} not reachable from {source} in depth first version")
+    return [], explored
