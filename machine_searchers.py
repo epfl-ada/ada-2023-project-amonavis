@@ -2,6 +2,83 @@ from heapq import heappop, heappush
 from itertools import count
 import networkx as nx
 from networkx.algorithms.shortest_paths.weighted import _weight_function
+import pandas as pd
+
+class LandmarkSearch:
+    def __init__(self, graph: nx.DiGraph, landmark_num: int = 50):
+        # Default value should be a function of the size of the graph...
+        self.landmark_num = landmark_num
+
+        self.landmark_node_list = None
+
+        # Empty dictionaries to store info
+        self.shortest_paths_to_node = {}
+        self.shortest_paths_from_node = {}
+
+        self.fro_df = None
+        self.to_df = None
+
+        self.get_landmark_info(graph, landmark_num)
+
+    def get_landmark_info(self, graph: nx.DiGraph, landmark_num: int):
+        temp = sorted(graph.degree, key=lambda x: x[1], reverse=True)
+        temp = [elem[0] for elem in temp]
+        self.landmark_node_list = temp[:landmark_num]
+
+        for elem in self.landmark_node_list:
+            self.shortest_paths_to_node[elem] = nx.single_target_shortest_path(graph, elem)
+            self.shortest_paths_from_node[elem] = nx.single_source_shortest_path(graph, elem)
+
+        # Transforming the previous elements into a dict of lengths, because it's important
+        # But it's a dict of dicts!
+        paths_to_lengths = {}
+        paths_fro_lengths = {}
+
+        max_length = len(graph.nodes)
+
+        for elem in graph.nodes:
+            paths_fro_lengths[elem] = {}
+            paths_to_lengths[elem] = {}
+            for landmark in self.shortest_paths_from_node.keys():
+                # This extra code is to check if the key exists or not in the dictionaries
+
+                # And fro and to are swapped, but that's because the dicts we save the info to
+                # are as well.
+                # So this ends up making sense
+                if elem in self.shortest_paths_from_node[landmark]:
+                    paths_to_lengths[elem][landmark] = len(self.shortest_paths_from_node[landmark][elem])
+                else:
+                    paths_to_lengths[elem][landmark] = max_length
+
+                if elem in self.shortest_paths_to_node[landmark]:
+                    paths_fro_lengths[elem][landmark] = len(self.shortest_paths_to_node[landmark][elem])
+                else:
+                    paths_fro_lengths[elem][landmark] = max_length
+
+        # The easy way of distinguishing the two dfs is as follows:
+        # Get a loc[a, b]
+        # fro_df will describe distance from b to a
+        # to_df describes distance from a to b
+        self.fro_df = pd.DataFrame(paths_fro_lengths)
+        self.to_df = pd.DataFrame(paths_to_lengths)
+
+    def find_shortest_path(self, source, target):
+        # For this, I sum up the two and fro somehow, and find the values!
+        temp_fro = self.fro_df.loc[:, source]
+        temp_to = self.to_df.loc[:, target]
+
+        distances = temp_to + temp_fro
+        distances.sort_values(inplace=True)
+
+        landmark = distances.index[0]
+
+        # The landmark is the middle point, this tells us the best one
+        start_path = self.shortest_paths_to_node[landmark][source][:-1]
+        end_path = self.shortest_paths_from_node[landmark][target]
+
+        final_path = start_path + end_path
+
+        return final_path
 
 def modded_astar_path(G: nx.Graph, source: str, target: str, heuristic=None, weight="weight"):
     """Returns a list of nodes in a shortest path between source and target
