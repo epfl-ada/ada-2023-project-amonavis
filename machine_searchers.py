@@ -4,6 +4,7 @@ import networkx as nx
 from networkx.algorithms.shortest_paths.weighted import _weight_function
 import pandas as pd
 
+
 class LandmarkSearch:
     def __init__(self, graph: nx.DiGraph, landmark_num: int = 50):
         # Default value should be a function of the size of the graph...
