@@ -1,3 +1,0 @@
-source,target,reached,length,visited
-10th_century,11th_century,True,2,"['10th_century', '11th_century']"
-11th_century,Taiwan,True,3,"['11th_century', 'China', 'Taiwan']"
