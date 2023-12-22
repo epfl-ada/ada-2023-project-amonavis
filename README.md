@@ -1,4 +1,7 @@
 # The Man and the Machines
+# Data story (Update for P3)
+
+We documented our journey in a [data story available at this link](https://danielx278.github.io/data-story/)
 
 ## Abstract
 
@@ -26,12 +29,12 @@ Over the centuries, our personal experiences and the evolution of linguistics ma
 However, among the countless paths connecting two topics, our fallible mind often relies on our biased knowledge to create those connections: this leads us to trace paths that can appear obvious to us, but unnecessarily long or even nonsensical to a machine, which is traditionally seeking the fastest and optimal approach.
 The Man and the Machine starts from human navigation paths, defined by the users playing the Wikispeedia game, to then dwell into the navigation ability of the machine, through semantic-distance-based paths: how differently will the two entities approach this same problem?
 -->
-## Research questions
-* How does semantic distance affect the shortest paths found by A*, when compared to other heuristics for the shortest paths?
-* If time allows, are there any superior AI methods for exploring the graph?
+## Research questions (Update for P3)
+* Which heuristics are best at predicting the shortest path in the Wikispeedia graph?
+* Do any of these heuristics outperform humans?
 * Can we identify any patterns or recurring structures in the human paths (ie. going for a central hub)?
-* What insights can we draw from the cases where human paths outperform the machines ones? And viceversa?
-* Are there any specific Wikipedia categories that are correlated with the differences in the performances?
+* What insights can we draw from the cases where human paths outperform the machine ones? And vice versa?
+* Is there any way to characterize these differences in performance? Categories, semantic distance, path length, or something else?
 * How do these compare to the optimal path?
  
 ## Methods
