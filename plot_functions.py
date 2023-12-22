@@ -46,3 +46,22 @@ def barplot_solo(df, file_name = None, title = None, color = None, yaxis_label =
 
     fig.show()
     fig.write_html("Figures/Plotly_"+file_name+".html")
+
+def barplot_x_y_arrays(x, y, title = None, xaxis_title = None, yaxis_title = None, file_name = None):
+    
+    fig = go.Figure(go.Bar(
+    x = x,
+    y = y,
+    orientation='h',  # 'h' for horizontal, 'v' for vertical bars
+        # Adjust colors here
+    ))
+
+    fig.update_layout(
+        title=title,
+        xaxis_title = xaxis_title,
+        yaxis_title = yaxis_title,
+        height=800,  # Adjust the height of the plot as needed
+        margin=dict(l=150),  # Adjust left margin for longer y-axis labels
+    )
+    fig.show()
+    fig.write_html("Figures/Plotly_"+file_name+".html")
