@@ -3,6 +3,235 @@ from itertools import count
 import networkx as nx
 from networkx.algorithms.shortest_paths.weighted import _weight_function
 import pandas as pd
+from sentence_transformers import SentenceTransformer
+import torch
+import random
+
+
+class AlgorithmCarol:
+    def __init__(self, graph: nx.DiGraph):
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = SentenceTransformer('all-MiniLM-L6-v2').to(device)
+
+        self.pagerank = nx.pagerank(graph)
+        self.graph = graph
+
+    def get_embedding(self, text):
+        return self.model.encode(text, convert_to_tensor=True)
+
+    def semantic_similarity(self, word1, word2):
+        embedding1 = self.get_embedding(word1)
+        embedding2 = self.get_embedding(word2)
+
+        # L2 normalization of the embeddings (to make sure, although embedding should already be normalized)
+        embedding1_normalized = self.l2_normalize(embedding1)
+        embedding2_normalized = self.l2_normalize(embedding2)
+
+        # Compute and return the similarity of normalized tensors
+        return torch.dot(embedding1_normalized, embedding2_normalized).item()
+
+    def find_shortest_path(self, G: nx.DiGraph, source: str, target: str, ref_similarity=0.3, print_progress: bool = False):
+        # Initialize visited nodes set, children lists, and path
+        visited = set([])
+        current_children = []
+        sem_sim_childr = {}
+        max_page_childr = {}
+        path = []
+
+        # Set the current node to the source
+        current_node = source
+
+        # Flag to check if target is found
+        found = False
+
+        if print_progress:
+            print(f"Starting at node: {current_node}")
+
+        # Loop until the target is found or limit is reached
+        while not found:
+            # Mark the current node as visited and add to the path
+            visited.add(current_node)
+            path.append(current_node)
+
+            # Check if the path length limit is reached
+            if len(path) >= 25:
+                if print_progress:
+                    print("Limit of 25 nodes reached.")
+                return source, target, found, len(path), path
+
+            # Check if the target is reached
+            if current_node == target:
+                found = True
+                if print_progress:
+                    print(f"Moving to node: {current_node}")
+                    print(f"Target node reached in {len(path)} moves.")
+                return source, target, found, len(path), path,
+
+            # Get the children (successors) of the current node
+            current_children = list(G.successors(current_node))
+
+            # Reset the dictionaries for storing similarities and pageranks
+            sem_sim_childr = {}
+            max_page_childr = {}
+
+            # Iterate over children to calculate similarities and pageranks
+            for c in current_children:
+                # Check if the child is the target
+                if c == target:
+                    found = True
+                    visited.add(c)
+                    path.append(c)
+                    if print_progress:
+                        print(f"Moving to node: {c}")
+                        print(f"Target node reached in {len(path)} moves.")
+                    return source, target, found, len(path), path,
+
+                # Skip visited nodes
+                elif c in visited:
+                    current_children.remove(c)
+                else:
+                    # Compute semantic similarity
+                    semsim = self.semantic_similarity(c, target)
+                    sem_sim_childr[c] = semsim
+
+                    # Compute pagerank
+                    #pagerank = G.nodes[c]['pagerank']
+                    max_page_childr[c] = self.pagerank.get(c, None)
+
+            # Choose the next node based on similarity or pagerank
+            if sem_sim_childr:
+                # Get the node with the maximum similarity
+                max_node = max(sem_sim_childr, key=sem_sim_childr.get)
+                max_sim = sem_sim_childr[max_node]
+                if max_sim >= ref_similarity:
+                    # Move to the node with the highest similarity
+                    current_node = max_node
+                else:
+                    # Move to the node with the highest pagerank
+                    max_node = max(max_page_childr, key=max_page_childr.get)
+                    current_node = max_node
+            else:
+                # Choose a random successor if no suitable node is found
+                current_children = list(G.successors(current_node))
+                current_node = random.choice(current_children)
+
+            if print_progress:
+                print(f"Moving to node: {current_node}")
+
+    @staticmethod
+    def l2_normalize(tensor):
+        return tensor / tensor.norm(p=2, dim=0, keepdim=True)
+
+
+class AlgorithmCarlos:
+    def __init__(self, graph: nx.DiGraph):
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = SentenceTransformer('all-MiniLM-L6-v2').to(device)
+
+        self.pagerank = nx.pagerank(graph)
+        self.graph = graph
+
+    def get_embedding(self, text):
+        return self.model.encode(text, convert_to_tensor=True)
+
+    def semantic_similarity(self, word1, word2):
+        embedding1 = self.get_embedding(word1)
+        embedding2 = self.get_embedding(word2)
+
+        # L2 normalization of the embeddings (to make sure, although embedding should already be normalized)
+        embedding1_normalized = self.l2_normalize(embedding1)
+        embedding2_normalized = self.l2_normalize(embedding2)
+
+        # Compute and return the similarity of normalized tensors
+        return torch.dot(embedding1_normalized, embedding2_normalized).item()
+
+    def get_value(self, node_value, target_value):
+        """
+        Calculate a value for a node based on its semantic similarity to the target and its PageRank.
+
+        Parameters:
+        G (networkx.Graph): The graph the node is part of.
+        node_value (str): The value of the current node.
+        target_value (str): The value of the target node.
+
+        Returns:
+        float: A calculated value for the node.
+        """
+        # Calculate semantic similarity between the node and the target
+        similarity = self.semantic_similarity(node_value, target_value)
+
+        # Get PageRank of the node in graph G
+        node_pagerank = self.pagerank.get(node_value, None)
+
+        # Calculate the final value based on similarity and PageRank
+        if similarity < 0.1:
+            f = node_pagerank
+        elif 0.1 <= similarity <= 0.5:
+            f = similarity * node_pagerank
+        else:
+            f = similarity
+        return f
+
+    def find_shortest_path(self, start_node, target_node):
+        """
+        Algorithm to find a path in a graph from start_node to target_node.
+
+        Parameters:
+        graph (networkx.Graph): The graph to traverse.
+        start_node (str): The starting node in the graph.
+        target_node (str): The target node to reach in the graph.
+
+        Returns:
+        tuple: A tuple containing the number of moves, the visited nodes list, and a flag indicating if the target was reached.
+        """
+        # Initialize the starting node and visited nodes list
+        current_node = start_node
+        visited = []  # List to keep track of visited nodes
+        previous_node = start_node
+        reached_target = False
+        print(f"Starting at node: {current_node}")
+
+        # Just in case
+        length = 0
+
+        # Iterate up to a maximum of 20 moves
+        for length in range(20):
+            # Check if the current node is the target
+            if current_node == target_node:
+                print(f"Target node reached in {length} moves.")
+                visited.append(previous_node)
+                visited.append(current_node)
+                reached_target = True
+                return length+1, visited, reached_target
+
+            # Mark the previous node as visited (except for the first move)
+            if length != 0:
+                visited.append(previous_node)
+
+            # Update the previous node
+            previous_node = current_node
+
+            # Get unvisited neighbors of the current node
+            neighbors = list(self.graph.neighbors(current_node))
+            unvisited_neighbors = [n for n in neighbors if n not in visited and n != current_node]
+
+            # Choose the next node based on calculated value
+            if unvisited_neighbors:
+                next_node = max(unvisited_neighbors, key=lambda n: self.get_value(n, target_node))
+                current_node = next_node
+                print(f"Moving to node: {current_node}")
+            else:
+                # Exit if there are no unvisited neighbors
+                print("No more unvisited neighbors to move to.")
+                return length+1, visited, reached_target
+
+        # If the loop exits due to reaching the move limit
+        print("Limit of 20 nodes reached.")
+        return length+1, visited, reached_target
+
+    @staticmethod
+    def l2_normalize(tensor):
+        return tensor / tensor.norm(p=2, dim=0, keepdim=True)
 
 
 class LandmarkSearch:
